@@ -1,0 +1,36 @@
+{
+  "name": "iobroker.miele",
+  "version": "0.0.2",
+  "description": "Miele Adapter",
+  "author": {
+    "name": "soef",
+    "email": "soef@gmx.net"
+  },
+  "contributors": [
+    {
+      "name": "soef",
+      "email": "soef@gmx.net"
+    }
+  ],
+  "homepage": "https://github.com/soef/iobroker.miele",
+  "license": "MIT",
+  "keywords": [
+    "ioBroker",
+    "miele",
+    "Smart Home",
+    "home automation"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/soef/iobroker.miele"
+  },
+  "dependencies": {
+    "xml2js": "^0.4.16"
+  },
+  "devDependencies": {
+  },
+  "bugs": {
+    "url": "https://github.com/soef/iobroker.miele/issues"
+  },
+  "readmeFilename": "README.md"
+}

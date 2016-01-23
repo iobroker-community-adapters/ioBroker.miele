@@ -1,0 +1,35 @@
+{
+  "common": {
+    "name": "miele",
+    "version": "0.0.2",
+    "title": "Miele",
+    "desc": {
+      "en": "Miele XGW 3000",
+      "de": "Miele XGW 3000",
+      "ru": "Miele XGW 3000"
+    },
+    "platform": "Javascript/Node.js",
+    "mode": "daemon",
+    "icon": "miele.png",
+    "extIcon": "https://raw.githubusercontent.com/soef/iobroker.miele/master/admin/miele.png",
+    "readme": "https://github.com/soef/iobroker.miele/blob/master/README.md",
+    "loglevel": "info",
+    "type": "hardware"
+  },
+  "native": {
+  },
+  "instanceObjects": [
+    {
+      "_id": "IPs",
+      "type": "state",
+      "common": {
+        "role": "state",
+        "name": "IPs",
+        "type": "string"
+      },
+      "native": { }
+    }
+  ],
+  "objects": [
+  ]
+}
