@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "miele",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "title": "Miele",
     "desc": {
       "en": "Miele XGW 3000",
@@ -13,8 +13,20 @@
     "icon": "miele.png",
     "extIcon": "https://raw.githubusercontent.com/soef/iobroker.miele/master/admin/miele.png",
     "readme": "https://github.com/soef/iobroker.miele/blob/master/README.md",
+    "license": "MIT",
     "loglevel": "info",
+    "keywords": [
+      "ioBroker",
+      "miele",
+      "Smart Home",
+      "miele@home",
+      "xgw 3000",
+      "xgw 2000"
+    ],
+    "enabled": false,
+    "nondeletable": true,
     "type": "hardware"
+
   },
   "native": {
   },

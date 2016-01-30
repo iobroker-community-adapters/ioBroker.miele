@@ -1,6 +1,6 @@
 {
   "name": "iobroker.miele",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Miele Adapter",
   "author": {
     "name": "soef",
@@ -18,7 +18,9 @@
     "ioBroker",
     "miele",
     "Smart Home",
-    "home automation"
+    "miele@home",
+    "xgw 3000",
+    "xgw 2000"
   ],
   "repository": {
     "type": "git",
