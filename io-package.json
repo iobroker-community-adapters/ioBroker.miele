@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "miele",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "title": "Miele",
     "desc": {
       "en": "Miele XGW 3000",
@@ -23,7 +23,7 @@
       "xgw 3000",
       "xgw 2000"
     ],
-    "enabled": false,
+    "enabled": true,
     "nondeletable": true,
     "type": "hardware"
 
