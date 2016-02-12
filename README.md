@@ -3,6 +3,12 @@
 
 Adapter for Miele Devices
 
+#### Important
+Before installing this version, you should uninstall the previous installation. 
+Otherwise you have to delete the old device manually.
+
+Now using rpc calls
+
 #### Configuration
 Configuration not necessary. The first received broadcast will create all alilable devices and states
 
@@ -18,7 +24,7 @@ Miele gateway e.g. XGW 3000
 ### License
 The MIT License (MIT)
 
-Copyright (c) 2015 soef <soef@gmx.net>
+Copyright (c) 2015-2016 soef <soef@gmx.net>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
