@@ -5,12 +5,12 @@ const USE_ACTIONS = false;
 const READ_FROM_RPC_AT_START = true;
 
 var utils = require(__dirname + '/lib/utils'),
-    soef = require(__dirname + '/lib/soef'),
     dgram = require('dgram'),
     rpc = require('node-json-rpc');
 
+var soef = require(__dirname + '/lib/soef'),
+    g_devices = soef.Devices();
 
-var g_devices = soef.Devices();
 var socket = null;
 var adapter = utils.adapter({
     name: 'miele',
@@ -82,8 +82,8 @@ function id2uid(id) {
     return ZIGBEEPREFIX + id;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function startListener(callback) {
     var port = 2810;
@@ -92,14 +92,13 @@ function startListener(callback) {
     socket.bind(port, function () {
         // XML
         //socket.addMembership('224.255.68.139'); 
-        
-        // ZIGBEEPREFIX  
+
+        // ZIGBEEPREFIX
         socket.addMembership('239.255.68.139');
         if (callback) return callback(socket);
     });
     socket.on('message', onMessage);
 }
-
 
 function onMessage(msg, rinfo) {
     if (!msg || !rinfo) return;
@@ -155,7 +154,6 @@ rpcClients.add = function (ip, read, callback) {
     }
     return false;
 }
-
 
 function rpcClient(ip, read, callback) {
     
@@ -230,6 +228,7 @@ function rpcClient(ip, read, callback) {
             var dco = getSuperVisionDeviceClass(result);
             if (dco && dco.Properties && dco.Properties.length >= 6) {
                 var dev = new CState(uid2id(uid), dco.Properties[3].Metadata['LocalizedValue'], list);
+                //var dev = new g_devices.CState(uid2id(uid), dco.Properties[3].Metadata['LocalizedValue']);
                 for (var i = 0; i < dco.Properties.length; i++) {
                     switch (dco.Properties[i].Name) {
                         case "events":
@@ -295,48 +294,9 @@ function rpcClient(ip, read, callback) {
 }
 
 
-function valtype(val) {
-    switch (val) {
-        //fastest way for most states
-        case 'true': return true;
-        case 'false': return false;
-        case '0': return 0;
-        case '1': return 1;
-        case '2': return 2;
-        case '3': return 3;
-        case '4': return 4;
-        case '5': return 5;
-        case '6': return 6;
-        case '7': return 7;
-        case '8': return 8;
-        case '9': return 9;
-    }
-    var number = parseInt(val);
-    if (number.toString() === val) return number;
-    var float = parseFloat(val);
-    if (float.toString() === val) return float;
-    return val;
-}
-
-
-const tr = { '\u00e4': 'ae', '\u00fc': 'ue', '\u00f6': 'oe', '\u00c4': 'Ae', '\u00d6': 'Oe', '\u00dc': 'Ue', '\u00df': 'ss' };
-
 function CState(name, showName, list) {
-    
-    this.name = name.replace(/[\u00e4\u00fc\u00f6\u00c4\u00d6\u00dc\u00df]/g, function ($0) {
-        return tr[$0]
-    });
-    this.list = list;
-    this.list [name] = { exist: false };
-    if (showName) this.list [name].showName = showName;
-    
-    this.add = function (name, val, showName) {
-        var obj = { exist: false };
-        if (val != undefined) obj.val = valtype(val);
-        if (showName) obj.showName = showName;
-        this.list[this.name + (name ? '.' + name : "")] = obj;
-    }
-    
+    g_devices.CState.call(this, name, showName, list);
+
     this.setState = function (name, value) {
         if (typeof name == 'object') {
             var showName = name.Metadata['description'];
