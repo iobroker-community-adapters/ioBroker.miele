@@ -8,16 +8,22 @@ var utils = require(__dirname + '/lib/utils'),
     dgram = require('dgram'),
     rpc = require('node-json-rpc');
 
-var soef = require(__dirname + '/lib/soef'),
+var soef = require(__dirname + '/lib/soef'), //(false),
     g_devices = soef.Devices();
 
+//soef.extendGlobalNamespace();
+
 var socket = null;
+
 var adapter = utils.adapter({
     name: 'miele',
     
     unload: function (callback) {
         try {
-            if (socket) socket.close();
+            if (socket) {
+                socket.close();
+                socket = null;
+            }
             callback();
         } catch (e) {
             callback();
@@ -39,7 +45,8 @@ var adapter = utils.adapter({
     //    //adapter.log.info('stateChange ' + id + ' ' + JSON.stringify(state));
     //},
     ready: function () {
-        main();
+        g_devices.init(adapter, main);
+        //main();
     }
 });
 
@@ -56,7 +63,7 @@ ips.init = function (callback) {
         for (var i in a) self.push(a[i]);
         if (callback) callback(0);
     });
-}
+};
 
 ips.add = function (ip) {
     var idx = this.indexOf(ip);
@@ -65,7 +72,7 @@ ips.add = function (ip) {
         adapter.setState("IPs", JSON.stringify(ips), true);
     }
     return (idx < 0);
-}
+};
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -100,13 +107,30 @@ function startListener(callback) {
     socket.on('message', onMessage);
 }
 
+
+var updateTimer = {
+    handle: 0,
+    set: function (obj) {
+        if (this.handle) return;
+        this.handle = setTimeout (function () {
+            rpcClients.updateDevice(obj);
+        }, 1000);
+    },
+    clear: function () {
+        if (this.handle) {
+            clearTimeout(this.handle);
+            this.handle = 0;
+        }
+    }
+};
+
+
 function onMessage(msg, rinfo) {
     if (!msg || !rinfo) return;
     adapter.log.debug("onMessage: " + msg);
 
-    var obj = {},
-        as = msg.toString().split('&'),
-        ip = rinfo.address;
+    var obj = { ip: rinfo.address },
+        as = msg.toString().split('&');
     for (var i in as) {
         var a = as[i].split('=');
         obj[a[0]] = a[1];
@@ -116,46 +140,77 @@ function onMessage(msg, rinfo) {
     obj.id = uid2id(obj.id);
     
     if (!g_devices.has(obj.id)) {
-        if (!rpcClients.add(ip)) rpcClients[rinfo.address].updateDevice(obj.id);
+        if (!rpcClients.add(obj.ip)) {
+            rpcClients.updateDevice(obj);
+        }
     } else {
         switch (obj.property) {
+            case 'finishTime':
+                // wird immer vor duration aufgerufen.
+                updateTimer.set (obj);
+                return;
             case 'duration':
             case 'remoteEnabledFlag':
             case 'state':
-            case 'finishTime':
             default:
         }
-        rpcClients[ip].updateDevice(obj.id);
+        updateTimer.clear();
+        rpcClients.updateDevice(obj);
     }
 }
+
+var mieleStates = {
+    1: 'STATE_OFF',
+    2: 'STATE_STAND_BY',
+    3: 'STATE_PROGRAMMED',
+    4: 'STATE_PROGRAMMED_WAITING_TO_START',
+    5: 'STATE_RUNNING',
+    6: 'STATE_PAUSE',
+    7: 'STATE_END_PROGRAMMED',
+    8: 'STATE_FAILURE',
+    9: 'STATE_PROGRAMME_INTERRUPTED',
+    10: 'STATE_IDLE',
+    11: 'STATE_RINSE_HOLD',
+    12: 'STATE_SERVICE',
+    13: 'STATE_SUPERFREEZING',
+    14: 'STATE_SUPERCOOLING',
+    15: 'STATE_SUPERHEATING',
+    144: 'STATE_DEFAULT',
+    145: 'STATE_LOCKED',
+    146: 'STATE_SUPERCOOLING_SUPERFREEZING'
+};
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var rpcClients = {};
 
+rpcClients.updateDevice = function(obj) {
+    this[obj.ip].updateDevice(obj.id);
+};
+
 rpcClients.getClient = function (ip) {
-    if (this.hasOwnProperty(ip)) return this[ip];
-    var client = new rpcClient(ip);
-    this[ip] = client;
+    if (this.has(ip)) return this[ip];
+    this[ip] = new RPCClient(ip);
     return this[ip];
-}
+};
 
 rpcClients.has = function (ip) {
     return this.hasOwnProperty(ip);
-}
+};
 
 rpcClients.add = function (ip, read, callback) {
     ips.add(ip);
     if (!this.has(ip)) {
-        var client = new rpcClient(ip, read, callback);
-        this[ip] = client;
+        this[ip] = new RPCClient(ip, read, callback);
         return true;
     }
     return false;
-}
+};
 
-function rpcClient(ip, read, callback) {
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function RPCClient(ip, read, callback) {
     
     rpc.Client.call(this, { port: 80, host: ip, path: '/remote/json-rpc' /*,ssl: null*/ });
     
@@ -175,7 +230,7 @@ function rpcClient(ip, read, callback) {
             if (err || !data) return callback(err, 0);
             callback(err, data.result);
         });
-    }
+    };
     
     this.init = function (callback) {
         
@@ -197,7 +252,7 @@ function rpcClient(ip, read, callback) {
             
             if (callback) callback(0);
         });
-    }
+    };
     
     this.invokeOperation = function (uid, modelID, cmd /*'start' oder 'stop'*/, callback) {
         // TODO...
@@ -211,7 +266,7 @@ function rpcClient(ip, read, callback) {
                 callback(err, result);
             }
         );
-    }
+    };
     
     function getSuperVisionDeviceClass(dcos) {
         if (dcos) for (var i = 0; i < dcos.length; i++) {
@@ -222,14 +277,64 @@ function rpcClient(ip, read, callback) {
         return null;
     }
     
-    this.readInfo = function (uid, list, callback) {
+    //this.readInfo = function (uid, list, callback) {
+    //    this.HDAccess_getDeviceClassObjects(id2uid(uid), true, function (err, result) {
+    //        if (err || !result) {
+    //            return callback(-1);
+    //        }
+    //        var dco = getSuperVisionDeviceClass(result);
+    //        var dev = new CState(uid2id(uid), dco.Properties[3].Metadata['LocalizedValue']);
+    //        if (dco && dco.Properties && dco.Properties.length >= 6) {
+    //            //var dev = new CState(uid2id(uid), dco.Properties[3].Metadata['LocalizedValue'], list);
+    //            //var dev = new CState(uid2id(uid), dco.Properties[3].Metadata['LocalizedValue']);
+    //            for (var i = 0; i < dco.Properties.length; i++) {
+    //                switch (dco.Properties[i].Name) {
+    //                    case "events":
+    //                    case 'extendedDeviceState':
+    //                    case 'brandId':
+    //                    case 'companyId':
+    //                    case 'productTypeId':
+    //                    case 'specificationVersion':
+    //                    case 'processAction':
+    //                    case 'tunnelingVersion':
+    //                        break;
+    //                    default:
+    //                        dev.setState(dco.Properties[i])
+    //                        break;
+    //                }
+    //            }
+    //            //dev.update(callback);
+    //        }
+    //        dev.update(callback);
+    //        //callback(0);
+    //    });
+    //}
+    
+    //this.updateDevice = function (id, callback) {
+    //    var list = {};
+    //    this.readInfo(id, list, function (err) {
+    //        if (err || !list) return;
+    //        if (callback) callback(0);
+    //        //g_devices.update(list, callback);
+    //    });
+    //}
+
+    //this.updateDevice = function (id, callback) {
+    //    this.readInfo(id, {}, callback);
+    //}
+
+    this.updateDevice = function (uid, callback, doUpdate) {
         this.HDAccess_getDeviceClassObjects(id2uid(uid), true, function (err, result) {
-            if (err || !result) return callback(-1);
+            if (err || !result) {
+                return callback(-1);
+            }
+            var stateValueName = '';
             var dco = getSuperVisionDeviceClass(result);
+            var showName = dco.Properties[3].Metadata['LocalizedValue'];
+            var dev = new CDevice(uid2id(uid), showName);
             if (dco && dco.Properties && dco.Properties.length >= 6) {
-                var dev = new CState(uid2id(uid), dco.Properties[3].Metadata['LocalizedValue'], list);
-                //var dev = new g_devices.CState(uid2id(uid), dco.Properties[3].Metadata['LocalizedValue']);
                 for (var i = 0; i < dco.Properties.length; i++) {
+                    //noinspection FallThroughInSwitchStatementJS,FallThroughInSwitchStatementJS
                     switch (dco.Properties[i].Name) {
                         case "events":
                         case 'extendedDeviceState':
@@ -240,52 +345,39 @@ function rpcClient(ip, read, callback) {
                         case 'processAction':
                         case 'tunnelingVersion':
                             break;
+                        case 'state':
+                            stateValueName = mieleStates[dco.Properties[i].Value];
                         default:
-                            dev.setState(dco.Properties[i])
+                            dev.setState(dco.Properties[i]);
                             break;
                     }
                 }
             }
-            callback(0);
+            dev.setChannel();
+            dev.set('', stateValueName, showName);
+            if (doUpdate !== false) dev.update(callback);
+            else callback(0);
+            //if (stateValueName) g_devices.setStateEx(uid2id(uid), stateValueName, true);
         });
-    }
-    
-    this.updateDevice = function (id, callback) {
-        var list = {};
-        this.readInfo(id, list, function (err) {
-            if (err || !list) return;
-            g_devices.update(list, callback);
-        });
-    }
-    
+    };
+
     this.readHomeDevices = function (callback) {
-        
+
         this.HDAccess_getHomeDevices('(type=SuperVision)', function (err, results) {
-            if (!results) return callback(-1);
-            for (var i = 0; i < results.length; i++) {
-                that.updateDevice(results[i].UID);
-            }
-            if (callback) callback(0);
-            return;
-            
-        //    var cnt = 0;
-        //    function add() {
-        //        if (cnt < results.length) {
-        //            g_devices.readInfo(results[cnt].UID, g_devices.states, function (err, device) {
-        //                cnt++;
-        //                setTimeout(add, 0);
-        //            });
-        //            return;
-        //        //client.HDAccess_getHomeDevice(devices[cnt].UID, function(err, result) {
-        //        //    console.log("" + JSON.stringify(result));
-        //        //})
-        //        }
-        //        g_devices.createAll(callback);
-        //    }
-            
-        //    add();
+            if (!results) return safeCB(callback, -1);
+
+            //njs.forEachCB(results.length,
+            forEachCB(results.length,
+                function(cnt, doit) {
+                    that.updateDevice(results[cnt].UID, doit, false);
+                },
+                function(err) {
+                    g_devices.update(callback);
+                }
+            );
+
         });
-    }
+    };
     
     this.init(function (err) {
         if (read) that.readHomeDevices(callback);
@@ -294,21 +386,38 @@ function rpcClient(ip, read, callback) {
 }
 
 
-function CState(name, showName, list) {
-    g_devices.CState.call(this, name, showName, list);
+//function CState(name, showName, list) {
+//    g_devices.CState.call(this, name, showName, list);
+//
+//    this.setState = function (name, value) {
+//        if (typeof name == 'object') {
+//            var showName = name.Metadata['description'];
+//            this.add('states.' + name.Name, name.Value, showName);
+//            if (name.Metadata['LocalizedValue']) {
+//                var n = name.Metadata['LocalizedID'] ? name.Metadata['LocalizedID'] : name.Name;
+//                this.add('localizedStates' + '.' + n, name.Metadata['LocalizedValue'], showName);
+//            }
+//            return;
+//        }
+//        this.add('states.' + name, value);
+//    }
+//
+//}
+
+function CDevice(name, showName, list) {
+    g_devices.CDevice.call(this, name, showName, list);
 
     this.setState = function (name, value) {
         if (typeof name == 'object') {
             var showName = name.Metadata['description'];
-            this.add('states.' + name.Name, name.Value, showName);
+            this.set('states.' + name.Name, name.Value, showName);
             if (name.Metadata['LocalizedValue']) {
                 var n = name.Metadata['LocalizedID'] ? name.Metadata['LocalizedID'] : name.Name;
-                //var s = this.name + '.' + 'localizedStates' + '.' + n;
-                this.add('localizedStates' + '.' + n, name.Metadata['LocalizedValue'], showName);
+                this.set('localizedStates' + '.' + n, name.Metadata['LocalizedValue'], showName);
             }
             return;
         }
-        this.add('states.' + name, value);
+        this.set('states.' + name, value);
     }
 
 }
@@ -317,19 +426,28 @@ function CState(name, showName, list) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function main() {
-    
-    g_devices.init(adapter, function (err) {
-        if (adapter.config.ip) ips.add(adapter.config.ip);
-        ips.init(function (err) {
-            for (var i = 0; i < ips.length; i++) {
-                rpcClients.add(ips[i], READ_FROM_RPC_AT_START);
-            }
-            startListener();
-        });
+
+    if (adapter.config.ip) ips.add(adapter.config.ip);
+    ips.init(function (err) {
+        for (var i = 0; i < ips.length; i++) {
+            rpcClients.add(ips[i], READ_FROM_RPC_AT_START);
+        }
+        startListener();
     });
-    
+
     if (USE_ACTIONS) {
         adapter.subscribeStates('*');
     }
 }
 
+/*
+16-02-22 20:47:23.686  - debug: miele.0 onMessage: type=2&id=hdm:ZigBee:001d63fffe0206ca#210&property=duration&value=2
+2016-02-22 20:48:24.166  - debug: miele.0 onMessage: type=2&id=hdm:ZigBee:001d63fffe0206ca#210&property=phase&value=7
+2016-02-22 20:48:25.366  - debug: miele.0 onMessage: type=2&id=hdm:ZigBee:001d63fffe0206ca#210&property=finishTime&value=1
+2016-02-22 20:48:25.408  - debug: miele.0 onMessage: type=2&id=hdm:ZigBee:001d63fffe0206ca#210&property=duration&value=1
+2016-02-22 20:49:23.409  - debug: miele.0 onMessage: type=2&id=hdm:ZigBee:001d63fffe0206ca#210&property=finishTime&value=0
+2016-02-22 20:49:23.433  - debug: miele.0 onMessage: type=2&id=hdm:ZigBee:001d63fffe0206ca#210&property=duration&value=0
+2016-02-22 20:52:21.973  - debug: miele.0 onMessage: type=2&id=hdm:ZigBee:001d63fffe0206ca#210&property=state&value=7
+2016-02-22 20:52:22.983  - debug: miele.0 onMessage: type=2&id=hdm:ZigBee:001d63fffe0206ca#210&property=phase&value=10
+2016-02-22 21:07:26.160  - debug: miele.0 onMessage: type=2&id=hdm:ZigBee:001d63fffe0206ca#210&property=state&value=1
+*/
