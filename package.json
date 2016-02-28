@@ -1,6 +1,6 @@
 {
   "name": "iobroker.miele",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "Miele Adapter",
   "author": {
     "name": "soef",
@@ -34,5 +34,6 @@
   "bugs": {
     "url": "https://github.com/soef/iobroker.miele/issues"
   },
-  "readmeFilename": "README.md"
+  "readmeFilename": "README.md",
+  "main": "miele.js"
 }
