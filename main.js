@@ -1,4 +1,5 @@
 ﻿"use strict";
+"use strict";
 
 const USE_ACTIONS = false;
 //const READ_FROM_RPC_AT_START = false;
@@ -380,7 +381,7 @@ function RPCClient(ip, read, callback) {
     };
     
     this.init(function (err) {
-        if (read) that.readHomeDevices(callback);
+        if (!err && read) that.readHomeDevices(callback);
     });
 
 }
@@ -429,6 +430,7 @@ function main() {
 
     if (adapter.config.ip) ips.add(adapter.config.ip);
     ips.init(function (err) {
+        if (err) return;
         for (var i = 0; i < ips.length; i++) {
             rpcClients.add(ips[i], READ_FROM_RPC_AT_START);
         }
