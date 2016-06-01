@@ -1,5 +1,4 @@
 ﻿"use strict";
-"use strict";
 
 const USE_ACTIONS = false;
 //const READ_FROM_RPC_AT_START = false;
@@ -393,24 +392,6 @@ function RPCClient(ip, read, callback) {
 }
 
 
-//function CState(name, showName, list) {
-//    g_devices.CState.call(this, name, showName, list);
-//
-//    this.setState = function (name, value) {
-//        if (typeof name == 'object') {
-//            var showName = name.Metadata['description'];
-//            this.add('states.' + name.Name, name.Value, showName);
-//            if (name.Metadata['LocalizedValue']) {
-//                var n = name.Metadata['LocalizedID'] ? name.Metadata['LocalizedID'] : name.Name;
-//                this.add('localizedStates' + '.' + n, name.Metadata['LocalizedValue'], showName);
-//            }
-//            return;
-//        }
-//        this.add('states.' + name, value);
-//    }
-//
-//}
-
 function CDevice(name, showName, list) {
     g_devices.CDevice.call(this, name, showName, list);
 
@@ -449,14 +430,3 @@ function main() {
     }
 }
 
-/*
-16-02-22 20:47:23.686  - debug: miele.0 onMessage: type=2&id=hdm:ZigBee:001d63fffe0206ca#210&property=duration&value=2
-2016-02-22 20:48:24.166  - debug: miele.0 onMessage: type=2&id=hdm:ZigBee:001d63fffe0206ca#210&property=phase&value=7
-2016-02-22 20:48:25.366  - debug: miele.0 onMessage: type=2&id=hdm:ZigBee:001d63fffe0206ca#210&property=finishTime&value=1
-2016-02-22 20:48:25.408  - debug: miele.0 onMessage: type=2&id=hdm:ZigBee:001d63fffe0206ca#210&property=duration&value=1
-2016-02-22 20:49:23.409  - debug: miele.0 onMessage: type=2&id=hdm:ZigBee:001d63fffe0206ca#210&property=finishTime&value=0
-2016-02-22 20:49:23.433  - debug: miele.0 onMessage: type=2&id=hdm:ZigBee:001d63fffe0206ca#210&property=duration&value=0
-2016-02-22 20:52:21.973  - debug: miele.0 onMessage: type=2&id=hdm:ZigBee:001d63fffe0206ca#210&property=state&value=7
-2016-02-22 20:52:22.983  - debug: miele.0 onMessage: type=2&id=hdm:ZigBee:001d63fffe0206ca#210&property=phase&value=10
-2016-02-22 21:07:26.160  - debug: miele.0 onMessage: type=2&id=hdm:ZigBee:001d63fffe0206ca#210&property=state&value=1
-*/

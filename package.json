@@ -1,6 +1,6 @@
 {
   "name": "iobroker.miele",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "Miele Adapter",
   "author": {
     "name": "soef",
