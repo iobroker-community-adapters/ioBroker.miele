@@ -1,6 +1,6 @@
 {
   "name": "iobroker.miele",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Miele Adapter",
   "author": {
     "name": "soef",
@@ -24,16 +24,42 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/soef/iobroker.miele"
+    "url": "git+https://github.com/soef/iobroker.miele.git"
   },
   "dependencies": {
     "node-json-rpc": "^0.0.1"
   },
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "bugs": {
     "url": "https://github.com/soef/iobroker.miele/issues"
   },
-  "readmeFilename": "README.md",
-  "main": "miele.js"
+  "main": "miele.js",
+  "gitHead": "8882a32b630e9a7305edef3006e6a4e9a6e4908c",
+  "_id": "iobroker.miele@0.0.12",
+  "scripts": {},
+  "_shasum": "6fcffc8b8bb51e09379e341914a81510b3e469ec",
+  "_from": "iobroker.miele@*",
+  "_npmVersion": "2.14.7",
+  "_nodeVersion": "4.2.2",
+  "_npmUser": {
+    "name": "soef",
+    "email": "soef@gmx.net"
+  },
+  "dist": {
+    "shasum": "6fcffc8b8bb51e09379e341914a81510b3e469ec",
+    "tarball": "http://registry.npmjs.org/iobroker.miele/-/iobroker.miele-0.0.12.tgz"
+  },
+  "maintainers": [
+    {
+      "name": "soef",
+      "email": "soef@gmx.net"
+    }
+  ],
+  "_npmOperationalInternal": {
+    "host": "packages-9-west.internal.npmjs.com",
+    "tmp": "tmp/iobroker.miele-0.0.12.tgz_1456696787360_0.7426771116442978"
+  },
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/iobroker.miele/-/iobroker.miele-0.0.12.tgz",
+  "readme": "ERROR: No README data found!"
 }

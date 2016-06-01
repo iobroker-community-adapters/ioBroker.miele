@@ -59,7 +59,9 @@ var ips = [];
 ips.init = function (callback) {
     var self = this;
     adapter.getState("IPs", function (err, obj) {
-        if (err || !obj) return callback(-1);
+        if (err || !obj) {
+            return callback && callback(-1);
+        }
         var a = JSON.parse(obj.val);
         for (var i in a) self.push(a[i]);
         if (callback) callback(0);
@@ -237,7 +239,8 @@ function RPCClient(ip, read, callback) {
         
         that.call('system.listMethods', [], function (err, result) {
             if (err || !result) return callback ? callback(-1) : 0;
-            
+
+            adapter.log.debug('Attaching functions. Count: ' + result.length);
             for (var i = 0; i < result.length; i += 1) {
                 attach(result[i]);
             }
@@ -329,11 +332,14 @@ function RPCClient(ip, read, callback) {
             if (err || !result) {
                 return callback(-1);
             }
+            adapter.log.debug('HDAccess_getDeviceClassObjects called');
             var stateValueName = '';
             var dco = getSuperVisionDeviceClass(result);
             var showName = dco.Properties[3].Metadata['LocalizedValue'];
+            adapter.log.debug('showName: ' + showName);
             var dev = new CDevice(uid2id(uid), showName);
             if (dco && dco.Properties && dco.Properties.length >= 6) {
+
                 for (var i = 0; i < dco.Properties.length; i++) {
                     //noinspection FallThroughInSwitchStatementJS,FallThroughInSwitchStatementJS
                     switch (dco.Properties[i].Name) {
@@ -430,9 +436,10 @@ function main() {
 
     if (adapter.config.ip) ips.add(adapter.config.ip);
     ips.init(function (err) {
-        if (err) return;
-        for (var i = 0; i < ips.length; i++) {
-            rpcClients.add(ips[i], READ_FROM_RPC_AT_START);
+        if (!err) {
+            for (var i = 0; i < ips.length; i++) {
+                rpcClients.add(ips[i], READ_FROM_RPC_AT_START);
+            }
         }
         startListener();
     });
