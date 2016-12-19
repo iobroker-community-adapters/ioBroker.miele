@@ -1,6 +1,6 @@
 {
   "name": "iobroker.miele",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "description": "Miele Adapter",
   "author": {
     "name": "soef",
@@ -27,7 +27,8 @@
     "url": "git+https://github.com/soef/iobroker.miele.git"
   },
   "dependencies": {
-    "node-json-rpc": "^0.0.1"
+    "node-json-rpc": "^0.0.1",
+    "soef": "^0.1.24"
   },
   "devDependencies": {
     "grunt": "^0.4.5",

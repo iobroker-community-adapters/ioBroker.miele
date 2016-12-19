@@ -1,14 +1,14 @@
 ﻿"use strict";
 
 var USE_ACTIONS = false;
-//var READ_FROM_RPC_AT_START = false;
 var READ_FROM_RPC_AT_START = true;
 
 var utils = require(__dirname + '/lib/utils'),
     dgram = require('dgram'),
     rpc = require('node-json-rpc');
 
-var soef = require(__dirname + '/lib/soef'), //(false),
+//var soef = require(__dirname + '/lib/soef'), //(false),
+var soef = require('soef'),
     g_devices = soef.Devices();
 
 //soef.extendGlobalNamespace();
@@ -29,27 +29,13 @@ var adapter = utils.adapter({
             callback();
         }
     },
-    discover: function (callback) {
-        adapter.log.info("adapter miele discovered");
-    },
-    install: function (callback) {
-        adapter.log.info("adapter miele installed");
-    },
-    uninstall: function (callback) {
-        adapter.log.info("adapter miele uninstalled");
-    },
-    //objectChange: function (id, obj) {
-    //    //adapter.log.info('objectChange ' + id + ' ' + JSON.stringify(obj));
-    //},
     //stateChange: function (id, state) {
     //    //adapter.log.info('stateChange ' + id + ' ' + JSON.stringify(state));
     //},
     ready: function () {
         g_devices.init(adapter, main);
-        //main();
     }
 });
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -91,7 +77,6 @@ function id2uid(id) {
     return ZIGBEEPREFIX + id;
 }
 
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function startListener(callback) {
@@ -99,10 +84,7 @@ function startListener(callback) {
     
     socket = dgram.createSocket('udp4');
     socket.bind(port, function () {
-        // XML
-        //socket.addMembership('224.255.68.139'); 
-
-        // ZIGBEEPREFIX
+        //socket.addMembership('224.255.68.139');
         socket.addMembership('239.255.68.139');
         if (callback) return callback(socket);
     });
@@ -280,52 +262,6 @@ function RPCClient(ip, read, callback) {
         return null;
     }
     
-    //this.readInfo = function (uid, list, callback) {
-    //    this.HDAccess_getDeviceClassObjects(id2uid(uid), true, function (err, result) {
-    //        if (err || !result) {
-    //            return callback(-1);
-    //        }
-    //        var dco = getSuperVisionDeviceClass(result);
-    //        var dev = new CState(uid2id(uid), dco.Properties[3].Metadata['LocalizedValue']);
-    //        if (dco && dco.Properties && dco.Properties.length >= 6) {
-    //            //var dev = new CState(uid2id(uid), dco.Properties[3].Metadata['LocalizedValue'], list);
-    //            //var dev = new CState(uid2id(uid), dco.Properties[3].Metadata['LocalizedValue']);
-    //            for (var i = 0; i < dco.Properties.length; i++) {
-    //                switch (dco.Properties[i].Name) {
-    //                    case "events":
-    //                    case 'extendedDeviceState':
-    //                    case 'brandId':
-    //                    case 'companyId':
-    //                    case 'productTypeId':
-    //                    case 'specificationVersion':
-    //                    case 'processAction':
-    //                    case 'tunnelingVersion':
-    //                        break;
-    //                    default:
-    //                        dev.setState(dco.Properties[i])
-    //                        break;
-    //                }
-    //            }
-    //            //dev.update(callback);
-    //        }
-    //        dev.update(callback);
-    //        //callback(0);
-    //    });
-    //}
-    
-    //this.updateDevice = function (id, callback) {
-    //    var list = {};
-    //    this.readInfo(id, list, function (err) {
-    //        if (err || !list) return;
-    //        if (callback) callback(0);
-    //        //g_devices.update(list, callback);
-    //    });
-    //}
-
-    //this.updateDevice = function (id, callback) {
-    //    this.readInfo(id, {}, callback);
-    //}
-
     this.updateDevice = function (uid, callback, doUpdate) {
         this.HDAccess_getDeviceClassObjects(id2uid(uid), true, function (err, result) {
             if (err || !result) {
@@ -363,7 +299,6 @@ function RPCClient(ip, read, callback) {
             dev.set('', stateValueName, showName);
             if (doUpdate !== false) dev.update(callback);
             else callback(0);
-            //if (stateValueName) g_devices.setStateEx(uid2id(uid), stateValueName, true);
         });
     };
 
