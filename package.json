@@ -1,6 +1,6 @@
 {
   "name": "iobroker.miele",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "description": "Miele Adapter",
   "author": {
     "name": "soef",
@@ -29,15 +29,25 @@
   "dependencies": {
     "node-json-rpc": "^0.0.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-replace": "^0.9.3",
+    "grunt-contrib-jshint": "^0.11.2",
+    "grunt-jscs": "^2.0.0",
+    "grunt-http": "^1.6.0",
+    "mocha": "^2.3.4",
+    "chai": "^3.4.1"
+  },
   "bugs": {
     "url": "https://github.com/soef/iobroker.miele/issues"
   },
   "main": "miele.js",
   "gitHead": "8882a32b630e9a7305edef3006e6a4e9a6e4908c",
-  "_id": "iobroker.miele@0.0.12",
-  "scripts": {},
-  "_shasum": "6fcffc8b8bb51e09379e341914a81510b3e469ec",
+  "_id": "iobroker.miele@0.0.16",
+  "scripts": {
+    "test": "node node_modules/mocha/bin/mocha"
+  },
+  "_shasum": "f791d64989e6ba566312e71a01ae0905e30588fd",
   "_from": "iobroker.miele@*",
   "_npmVersion": "2.14.7",
   "_nodeVersion": "4.2.2",
@@ -46,8 +56,8 @@
     "email": "soef@gmx.net"
   },
   "dist": {
-    "shasum": "6fcffc8b8bb51e09379e341914a81510b3e469ec",
-    "tarball": "http://registry.npmjs.org/iobroker.miele/-/iobroker.miele-0.0.12.tgz"
+    "shasum": "f791d64989e6ba566312e71a01ae0905e30588fd",
+    "tarball": "https://registry.npmjs.org/iobroker.miele/-/iobroker.miele-0.0.16.tgz"
   },
   "maintainers": [
     {
@@ -56,8 +66,9 @@
     }
   ],
   "_npmOperationalInternal": {
-    "host": "packages-9-west.internal.npmjs.com",
-    "tmp": "tmp/iobroker.miele-0.0.12.tgz_1456696787360_0.7426771116442978"
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/iobroker.miele-0.0.16.tgz_1464772142992_0.7467988841235638"
   },
-  "readmeFilename": "readme.md"
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/iobroker.miele/-/iobroker.miele-0.0.16.tgz"
 }

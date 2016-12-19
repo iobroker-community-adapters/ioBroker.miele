@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-const USE_ACTIONS = false;
-//const READ_FROM_RPC_AT_START = false;
-const READ_FROM_RPC_AT_START = true;
+var USE_ACTIONS = false;
+//var READ_FROM_RPC_AT_START = false;
+var READ_FROM_RPC_AT_START = true;
 
 var utils = require(__dirname + '/lib/utils'),
     dgram = require('dgram'),
@@ -79,7 +79,7 @@ ips.add = function (ip) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const ZIGBEEPREFIX = 'hdm:ZigBee:';
+var ZIGBEEPREFIX = 'hdm:ZigBee:';
 
 function uid2id(uid) {
     if (uid.indexOf(ZIGBEEPREFIX) !== 0) return uid;
