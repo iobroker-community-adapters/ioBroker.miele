@@ -5,15 +5,11 @@ var READ_FROM_RPC_AT_START = true;
 
 var utils = require(__dirname + '/lib/utils'),
     dgram = require('dgram'),
-    rpc = require('node-json-rpc');
+    rpc = require('node-json-rpc'),
+    soef = require('soef');
 
-//var soef = require(__dirname + '/lib/soef'), //(false),
-var soef = require('soef'),
-    g_devices = soef.Devices();
-
-//soef.extendGlobalNamespace();
-
-var socket = null;
+var g_devices = soef.Devices(),
+    socket = null;
 
 var adapter = utils.adapter({
     name: 'miele',
@@ -44,12 +40,11 @@ var ips = [];
 ips.init = function (callback) {
     var self = this;
     adapter.getState("IPs", function (err, obj) {
-        if (err || !obj) {
-            return callback && callback(-1);
+        if (!err && obj && obj.val) {
+            var a = JSON.parse(obj.val);
+            for (var i in a) self.push(a[i]);
         }
-        var a = JSON.parse(obj.val);
-        for (var i in a) self.push(a[i]);
-        if (callback) callback(0);
+        if (callback) callback();
     });
 };
 
@@ -123,10 +118,15 @@ function onMessage(msg, rinfo) {
     if (obj.id.indexOf(ZIGBEEPREFIX) !== 0) return;
     obj.id = uid2id(obj.id);
     
-    if (!g_devices.has(obj.id)) {
-        if (!rpcClients.add(obj.ip)) {
+    // if (!g_devices.has(obj.id)) {
+    //     if (!rpcClients.add(obj.ip)) {
+    //         rpcClients.updateDevice(obj);
+    //     }
+    // } else {
+    if (!rpcClients[obj.ip]) {
+        rpcClients.add(obj.ip, false, function(err) {
             rpcClients.updateDevice(obj);
-        }
+        });
     } else {
         switch (obj.property) {
             case 'finishTime':
@@ -184,8 +184,8 @@ rpcClients.has = function (ip) {
 };
 
 rpcClients.add = function (ip, read, callback) {
-    ips.add(ip);
     if (!this.has(ip)) {
+        ips.add(ip);
         this[ip] = new RPCClient(ip, read, callback);
         return true;
     }
@@ -263,9 +263,12 @@ function RPCClient(ip, read, callback) {
     }
     
     this.updateDevice = function (uid, callback, doUpdate) {
+        if(typeof this.HDAccess_getDeviceClassObjects !== 'function') {
+            return callback && callback(-1);
+        }
         this.HDAccess_getDeviceClassObjects(id2uid(uid), true, function (err, result) {
             if (err || !result) {
-                return callback(-1);
+                return callback && callback(-1);
             }
             adapter.log.debug('HDAccess_getDeviceClassObjects called');
             var stateValueName = '';
@@ -274,9 +277,7 @@ function RPCClient(ip, read, callback) {
             adapter.log.debug('showName: ' + showName);
             var dev = new CDevice(uid2id(uid), showName);
             if (dco && dco.Properties && dco.Properties.length >= 6) {
-
                 for (var i = 0; i < dco.Properties.length; i++) {
-                    //noinspection FallThroughInSwitchStatementJS,FallThroughInSwitchStatementJS
                     switch (dco.Properties[i].Name) {
                         case "events":
                         case 'extendedDeviceState':
@@ -303,11 +304,8 @@ function RPCClient(ip, read, callback) {
     };
 
     this.readHomeDevices = function (callback) {
-
         this.HDAccess_getHomeDevices('(type=SuperVision)', function (err, results) {
             if (!results) return safeCB(callback, -1);
-
-            //njs.forEachCB(results.length,
             forEachCB(results.length,
                 function(cnt, doit) {
                     that.updateDevice(results[cnt].UID, doit, false);
@@ -316,12 +314,12 @@ function RPCClient(ip, read, callback) {
                     g_devices.update(callback);
                 }
             );
-
         });
     };
     
     this.init(function (err) {
-        if (!err && read) that.readHomeDevices(callback);
+        if (err || !read) return callback && callback(err);
+        that.readHomeDevices(callback);
     });
 
 }
@@ -352,11 +350,9 @@ function main() {
 
     if (adapter.config.ip) ips.add(adapter.config.ip);
     ips.init(function (err) {
-        if (!err) {
-            for (var i = 0; i < ips.length; i++) {
-                rpcClients.add(ips[i], READ_FROM_RPC_AT_START);
-            }
-        }
+        ips.forEach(function(ip) {
+            rpcClients.add(ip, READ_FROM_RPC_AT_START);
+        });
         startListener();
     });
 
