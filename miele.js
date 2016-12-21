@@ -37,22 +37,20 @@ var adapter = utils.adapter({
 
 var ips = [];
 
-ips.init = function (callback) {
-    var self = this;
-    adapter.getState("IPs", function (err, obj) {
-        if (!err && obj && obj.val) {
-            var a = JSON.parse(obj.val);
-            for (var i in a) self.push(a[i]);
-        }
-        if (callback) callback();
-    });
+ips.init = function () {
+    var val = g_devices.getval('IPs');
+    if (val) {
+        var a = JSON.parse(val);
+        for (var i in a) this.push(a[i]);
+    }
 };
+
 
 ips.add = function (ip) {
     var idx = this.indexOf(ip);
     if (idx < 0) {
         this.push(ip);
-        adapter.setState("IPs", JSON.stringify(ips), true);
+        g_devices.root.setAndUpdate('IPs', JSON.stringify(ips))
     }
     return (idx < 0);
 };
@@ -124,9 +122,7 @@ function onMessage(msg, rinfo) {
     //     }
     // } else {
     if (!rpcClients[obj.ip]) {
-        rpcClients.add(obj.ip, false, function(err) {
-            rpcClients.updateDevice(obj);
-        });
+        rpcClients.add(obj.ip, true);
     } else {
         switch (obj.property) {
             case 'finishTime':
@@ -220,20 +216,28 @@ function RPCClient(ip, read, callback) {
         
         that.call('system.listMethods', [], function (err, result) {
             if (err || !result) return callback ? callback(-1) : 0;
-
             adapter.log.debug('Attaching functions. Count: ' + result.length);
-            for (var i = 0; i < result.length; i += 1) {
-                attach(result[i]);
-            }
-            
-            function attach(functionName) {
+
+            result.forEach(function(functionName) {
                 that[functionName.replace(/\W/g, '_')] = function () {
-                    var params = []; 
+                    var params = [];
                     for (var i = 0; i < arguments.length; i++) params.push(arguments[i]);
                     var callback = params.pop();
                     that.call(functionName, params, callback);
                 }
-            }
+            });
+            // for (var i = 0; i < result.length; i += 1) {
+            //     attach(result[i]);
+            // }
+            //
+            // function attach(functionName) {
+            //     that[functionName.replace(/\W/g, '_')] = function () {
+            //         var params = [];
+            //         for (var i = 0; i < arguments.length; i++) params.push(arguments[i]);
+            //         var callback = params.pop();
+            //         that.call(functionName, params, callback);
+            //     }
+            // }
             
             if (callback) callback(0);
         });
@@ -270,11 +274,10 @@ function RPCClient(ip, read, callback) {
             if (err || !result) {
                 return callback && callback(-1);
             }
-            adapter.log.debug('HDAccess_getDeviceClassObjects called');
             var stateValueName = '';
             var dco = getSuperVisionDeviceClass(result);
             var showName = dco.Properties[3].Metadata['LocalizedValue'];
-            adapter.log.debug('showName: ' + showName);
+            adapter.log.debug('HDAccess_getDeviceClassObjects called. showName: ' + showName);
             var dev = new CDevice(uid2id(uid), showName);
             if (dco && dco.Properties && dco.Properties.length >= 6) {
                 for (var i = 0; i < dco.Properties.length; i++) {
@@ -349,13 +352,12 @@ function CDevice(name, showName, list) {
 function main() {
 
     if (adapter.config.ip) ips.add(adapter.config.ip);
-    ips.init(function (err) {
-        ips.forEach(function(ip) {
-            rpcClients.add(ip, READ_FROM_RPC_AT_START);
-        });
-        startListener();
+    ips.init();
+    ips.forEach(function(ip) {
+        rpcClients.add(ip, READ_FROM_RPC_AT_START);
     });
-
+    startListener();
+    
     if (USE_ACTIONS) {
         adapter.subscribeStates('*');
     }

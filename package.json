@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "node-json-rpc": "^0.0.1",
-    "soef": "^0.1.24"
+    "soef": "^0.1.25"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
