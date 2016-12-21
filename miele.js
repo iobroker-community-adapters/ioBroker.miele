@@ -3,7 +3,7 @@
 var USE_ACTIONS = false;
 var READ_FROM_RPC_AT_START = true;
 
-var utils = require(__dirname + '/lib/utils'),
+var //utils = require(__dirname + '/lib/utils'),
     dgram = require('dgram'),
     rpc = require('node-json-rpc'),
     soef = require('soef');
@@ -11,27 +11,51 @@ var utils = require(__dirname + '/lib/utils'),
 var g_devices = soef.Devices(),
     socket = null;
 
-var adapter = utils.adapter({
-    name: 'miele',
-    
-    unload: function (callback) {
-        try {
-            if (socket) {
-                socket.close();
-                socket = null;
-            }
-            callback();
-        } catch (e) {
-            callback();
+// var adapter = utils.adapter({
+//     name: 'miele',
+//
+//     unload: function (callback) {
+//         try {
+//             if (socket) {
+//                 socket.close();
+//                 socket = null;
+//             }
+//             callback();
+//         } catch (e) {
+//             callback();
+//         }
+//     },
+//     //stateChange: function (id, state) {
+//     //    //adapter.log.info('stateChange ' + id + ' ' + JSON.stringify(state));
+//     //},
+//     ready: function () {
+//         g_devices.init(adapter, main);
+//     }
+// });
+
+
+var adapter = soef.Adapter (
+    main,
+    function onUnload (callback) {
+        if (socket) {
+            socket.close();
+            socket = null;
         }
+        callback();
     },
-    //stateChange: function (id, state) {
-    //    //adapter.log.info('stateChange ' + id + ' ' + JSON.stringify(state));
-    //},
-    ready: function () {
-        g_devices.init(adapter, main);
+    onUpdate,
+    { name: 'miele' }
+);
+
+
+function onUpdate(oldVersion, newVersion, callback) {
+    if(oldVersion < 28) {
+        dcs.delall(callback);
+        return;
     }
-});
+    callback();
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -216,7 +240,6 @@ function RPCClient(ip, read, callback) {
         
         that.call('system.listMethods', [], function (err, result) {
             if (err || !result) return callback ? callback(-1) : 0;
-            adapter.log.debug('Attaching functions. Count: ' + result.length);
 
             result.forEach(function(functionName) {
                 that[functionName.replace(/\W/g, '_')] = function () {
@@ -226,6 +249,7 @@ function RPCClient(ip, read, callback) {
                     that.call(functionName, params, callback);
                 }
             });
+            adapter.log.debug(result.length + ' functions attached');
             // for (var i = 0; i < result.length; i += 1) {
             //     attach(result[i]);
             // }
@@ -350,7 +374,7 @@ function CDevice(name, showName, list) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function main() {
-
+    
     if (adapter.config.ip) ips.add(adapter.config.ip);
     ips.init();
     ips.forEach(function(ip) {

@@ -1,6 +1,6 @@
 {
   "name": "iobroker.miele",
-  "version": "0.0.22",
+  "version": "0.0.28",
   "description": "Miele Adapter",
   "author": {
     "name": "soef",
@@ -43,33 +43,13 @@
     "url": "https://github.com/soef/iobroker.miele/issues"
   },
   "main": "miele.js",
-  "gitHead": "8882a32b630e9a7305edef3006e6a4e9a6e4908c",
-  "_id": "iobroker.miele@0.0.16",
   "scripts": {
     "test": "node node_modules/mocha/bin/mocha"
-  },
-  "_shasum": "f791d64989e6ba566312e71a01ae0905e30588fd",
-  "_from": "iobroker.miele@*",
-  "_npmVersion": "2.14.7",
-  "_nodeVersion": "4.2.2",
-  "_npmUser": {
-    "name": "soef",
-    "email": "soef@gmx.net"
-  },
-  "dist": {
-    "shasum": "f791d64989e6ba566312e71a01ae0905e30588fd",
-    "tarball": "https://registry.npmjs.org/iobroker.miele/-/iobroker.miele-0.0.16.tgz"
   },
   "maintainers": [
     {
       "name": "soef",
       "email": "soef@gmx.net"
     }
-  ],
-  "_npmOperationalInternal": {
-    "host": "packages-12-west.internal.npmjs.com",
-    "tmp": "tmp/iobroker.miele-0.0.16.tgz_1464772142992_0.7467988841235638"
-  },
-  "directories": {},
-  "_resolved": "https://registry.npmjs.org/iobroker.miele/-/iobroker.miele-0.0.16.tgz"
+  ]
 }

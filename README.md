@@ -1,13 +1,12 @@
 ![Logo](admin/miele.png)
 # ioBroker.miele
 
+[![NPM version](http://img.shields.io/npm/v/iobroker.miele.svg)](https://www.npmjs.com/package/iobroker.miele)
+[![Tests](http://img.shields.io/travis/soef/ioBroker.miele/master.svg)](https://travis-ci.org/soef/ioBroker.miele)
+
+<!-- [![Downloads](https://img.shields.io/npm/dm/iobroker.miele.svg)](https://www.npmjs.com/package/iobroker.miele)-->
+
 Adapter for Miele Devices
-
-#### Important
-Before installing this version, you should uninstall the previous installation. 
-Otherwise you have to delete the old device manually.
-
-Now using rpc calls
 
 #### Configuration
 Configuration not necessary. The first received broadcast will create all alilable devices and states
