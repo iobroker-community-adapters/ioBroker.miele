@@ -3,36 +3,12 @@
 var USE_ACTIONS = false;
 var READ_FROM_RPC_AT_START = true;
 
-var //utils = require(__dirname + '/lib/utils'),
-    dgram = require('dgram'),
+var dgram = require('dgram'),
     rpc = require('node-json-rpc'),
     soef = require('soef');
 
 var g_devices = soef.Devices(),
     socket = null;
-
-// var adapter = utils.adapter({
-//     name: 'miele',
-//
-//     unload: function (callback) {
-//         try {
-//             if (socket) {
-//                 socket.close();
-//                 socket = null;
-//             }
-//             callback();
-//         } catch (e) {
-//             callback();
-//         }
-//     },
-//     //stateChange: function (id, state) {
-//     //    //adapter.log.info('stateChange ' + id + ' ' + JSON.stringify(state));
-//     //},
-//     ready: function () {
-//         g_devices.init(adapter, main);
-//     }
-// });
-
 
 var adapter = soef.Adapter (
     main,
@@ -74,7 +50,7 @@ ips.add = function (ip) {
     var idx = this.indexOf(ip);
     if (idx < 0) {
         this.push(ip);
-        g_devices.root.setAndUpdate('IPs', JSON.stringify(ips))
+        g_devices.root.setAndUpdate('IPs', JSON.stringify(ips));
     }
     return (idx < 0);
 };
@@ -84,14 +60,25 @@ ips.add = function (ip) {
 
 var ZIGBEEPREFIX = 'hdm:ZigBee:';
 
+
+// function uid2id(uid) {
+//     if (uid.indexOf(ZIGBEEPREFIX) !== 0) return uid;
+//     return uid.substr(ZIGBEEPREFIX.length);
+// }
+//
+// function id2uid(id) {
+//     if (id.indexOf(ZIGBEEPREFIX) === 0) return id;
+//     return ZIGBEEPREFIX + id;
+// }
+
+var uidRe = new RegExp('^' + ZIGBEEPREFIX + '|^');
+
 function uid2id(uid) {
-    if (uid.indexOf(ZIGBEEPREFIX) !== 0) return uid;
-    return uid.substr(ZIGBEEPREFIX.length);
+    return uid.replace(uidRe, '');
 }
 
 function id2uid(id) {
-    if (id.indexOf(ZIGBEEPREFIX) === 0) return id;
-    return ZIGBEEPREFIX + id;
+    return id.replace(uidRe, ZIGBEEPREFIX);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -108,22 +95,23 @@ function startListener(callback) {
     socket.on('message', onMessage);
 }
 
+var updateTimer = soef.Timer();
 
-var updateTimer = {
-    handle: 0,
-    set: function (obj) {
-        if (this.handle) return;
-        this.handle = setTimeout (function () {
-            rpcClients.updateDevice(obj);
-        }, 1000);
-    },
-    clear: function () {
-        if (this.handle) {
-            clearTimeout(this.handle);
-            this.handle = 0;
-        }
-    }
-};
+// var updateTimer = {
+//     handle: 0,
+//     set: function (obj) {
+//         if (this.handle) return;
+//         this.handle = setTimeout (function () {
+//             rpcClients.updateDevice(obj);
+//         }, 1000);
+//     },
+//     clear: function () {
+//         if (this.handle) {
+//             clearTimeout(this.handle);
+//             this.handle = 0;
+//         }
+//     }
+// };
 
 
 function onMessage(msg, rinfo) {
@@ -140,18 +128,17 @@ function onMessage(msg, rinfo) {
     if (obj.id.indexOf(ZIGBEEPREFIX) !== 0) return;
     obj.id = uid2id(obj.id);
     
-    // if (!g_devices.has(obj.id)) {
-    //     if (!rpcClients.add(obj.ip)) {
-    //         rpcClients.updateDevice(obj);
-    //     }
-    // } else {
     if (!rpcClients[obj.ip]) {
         rpcClients.add(obj.ip, true);
     } else {
         switch (obj.property) {
             case 'finishTime':
                 // wird immer vor duration aufgerufen.
-                updateTimer.set (obj);
+                //updateTimer.set (obj);
+                updateTimer.set(function() {
+                    rpcClients.updateDevice(obj);
+                }, 1000);
+                //updateTimer.set(rpcClients.updateDevice.bind(rpcClients), 1000, obj);
                 return;
             case 'duration':
             case 'remoteEnabledFlag':
@@ -250,18 +237,6 @@ function RPCClient(ip, read, callback) {
                 }
             });
             adapter.log.debug(result.length + ' functions attached');
-            // for (var i = 0; i < result.length; i += 1) {
-            //     attach(result[i]);
-            // }
-            //
-            // function attach(functionName) {
-            //     that[functionName.replace(/\W/g, '_')] = function () {
-            //         var params = [];
-            //         for (var i = 0; i < arguments.length; i++) params.push(arguments[i]);
-            //         var callback = params.pop();
-            //         that.call(functionName, params, callback);
-            //     }
-            // }
             
             if (callback) callback(0);
         });
@@ -304,8 +279,8 @@ function RPCClient(ip, read, callback) {
             adapter.log.debug('HDAccess_getDeviceClassObjects called. showName: ' + showName);
             var dev = new CDevice(uid2id(uid), showName);
             if (dco && dco.Properties && dco.Properties.length >= 6) {
-                for (var i = 0; i < dco.Properties.length; i++) {
-                    switch (dco.Properties[i].Name) {
+                dco.Properties.forEach(function (prop) {
+                    switch (prop.Name) {
                         case "events":
                         case 'extendedDeviceState':
                         case 'brandId':
@@ -316,12 +291,31 @@ function RPCClient(ip, read, callback) {
                         case 'tunnelingVersion':
                             break;
                         case 'state':
-                            stateValueName = mieleStates[dco.Properties[i].Value];
+                            stateValueName = mieleStates[prop.Value];
                         default:
-                            dev.setState(dco.Properties[i]);
+                            dev.setState(prop);
                             break;
                     }
-                }
+                });
+                
+                // for (var i = 0; i < dco.Properties.length; i++) {
+                //     switch (dco.Properties[i].Name) {
+                //         case "events":
+                //         case 'extendedDeviceState':
+                //         case 'brandId':
+                //         case 'companyId':
+                //         case 'productTypeId':
+                //         case 'specificationVersion':
+                //         case 'processAction':
+                //         case 'tunnelingVersion':
+                //             break;
+                //         case 'state':
+                //             stateValueName = mieleStates[dco.Properties[i].Value];
+                //         default:
+                //             dev.setState(dco.Properties[i]);
+                //             break;
+                //     }
+                // }
             }
             dev.setChannel();
             dev.set('', stateValueName, showName);
