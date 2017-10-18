@@ -1,57 +1,60 @@
 {
-  "common": {
-    "name": "miele",
-    "version": "0.1.4",
-    "news": {
-      "0.1.4": {
-        "en": "node 0.12 removed from testing",
-        "de": "node 0.12 auf testing entfernt"
-      },
-      "0.1.3": {
-        "en": "Enhance CI testing",
-        "de": "CI testing erweitert"
-      }
+    "common": {
+        "name": "miele",
+        "version": "0.1.4",
+        "news": {
+            "0.1.4": {
+                "en": "node 0.12 removed from testing",
+                "de": "node 0.12 auf testing entfernt"
+            },
+            "0.1.3": {
+                "en": "Enhance CI testing",
+                "de": "CI testing erweitert"
+            }
+        },
+        "title": "Miele",
+        "desc": {
+            "en": "Miele XGW 3000",
+            "de": "Miele XGW 3000",
+            "ru": "Miele XGW 3000"
+        },
+        "platform": "Javascript/Node.js",
+        "mode": "daemon",
+        "icon": "miele.png",
+        "extIcon": "https://raw.githubusercontent.com/soef/iobroker.miele/master/admin/miele.png",
+        "readme": "https://github.com/soef/iobroker.miele/blob/master/README.md",
+        "license": "MIT",
+        "loglevel": "info",
+        "keywords": [
+            "ioBroker",
+            "miele",
+            "Smart Home",
+            "miele@home",
+            "xgw 3000",
+            "xgw 2000"
+        ],
+        "enabled": true,
+        "nondeletable": true,
+        "type": "household",
+        "authors": [
+            {
+                "name": "soef",
+                "email": "soef@gmx.net"
+            }
+        ]
     },
-    "title": "Miele",
-    "desc": {
-      "en": "Miele XGW 3000",
-      "de": "Miele XGW 3000",
-      "ru": "Miele XGW 3000"
-    },
-    "platform": "Javascript/Node.js",
-    "mode": "daemon",
-    "icon": "miele.png",
-    "extIcon": "https://raw.githubusercontent.com/soef/iobroker.miele/master/admin/miele.png",
-    "readme": "https://github.com/soef/iobroker.miele/blob/master/README.md",
-    "license": "MIT",
-    "loglevel": "info",
-    "keywords": [
-      "ioBroker",
-      "miele",
-      "Smart Home",
-      "miele@home",
-      "xgw 3000",
-      "xgw 2000"
+    "native": {},
+    "instanceObjects": [
+        {
+            "_id": "IPs",
+            "type": "state",
+            "common": {
+                "role": "state",
+                "name": "IPs",
+                "type": "string"
+            },
+            "native": {}
+        }
     ],
-    "enabled": true,
-    "nondeletable": true,
-    "type": "hardware"
-
-  },
-  "native": {
-  },
-  "instanceObjects": [
-    {
-      "_id": "IPs",
-      "type": "state",
-      "common": {
-        "role": "state",
-        "name": "IPs",
-        "type": "string"
-      },
-      "native": { }
-    }
-  ],
-  "objects": [
-  ]
+    "objects": []
 }
