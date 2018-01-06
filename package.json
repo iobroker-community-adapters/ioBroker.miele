@@ -1,6 +1,6 @@
 {
   "name": "iobroker.miele",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Miele Adapter",
   "author": {
     "name": "soef",
@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "node-json-rpc": "^0.0.1",
-    "soef": "^0.1.25"
+    "soef": "^0.1.45"
   },
   "devDependencies": {
     "mocha": "^4.1.0",

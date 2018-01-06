@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "miele",
-        "version": "0.1.5",
+        "version": "0.1.6",
         "news": {
+            "0.1.6": {
+                "en": "required soef version set to 0.1.45",
+                "de": "notwendige soef Version auf 0.1.45 erhöht"
+            },
             "0.1.5": {
                 "en": "update basic package-file testing (Apollon77)",
                 "de": "Erweiterung der Tests (Apollon77)"
