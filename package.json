@@ -28,12 +28,12 @@
   },
   "dependencies": {
     "node-json-rpc": "^0.0.1",
-    "soef": "^0.1.45"
+    "soef": "^0.1.45",
+    "@iobroker/adapter-core": "^1.0.3"
   },
   "devDependencies": {
     "mocha": "^4.1.0",
-    "chai": "^4.1.2",
-    "@iobroker/adapter-core": "^1.0.3"
+    "chai": "^4.1.2"
   },
   "bugs": {
     "url": "https://github.com/soef/iobroker.miele/issues"
