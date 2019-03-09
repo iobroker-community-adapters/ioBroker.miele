@@ -20,7 +20,7 @@ var adapter = soef.Adapter (
         callback();
     },
     onUpdate,
-    { name: 'miele' }
+    { name: 'miele-community' }
 );
 
 
