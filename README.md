@@ -12,6 +12,9 @@
 
 Adapter for Miele Devices
 
+### Initial Creation
+This adapter was initialy created by @soef at https://github.com/soef/ioBroker.miele but not maintained any more, so we moved it to iobroker-community so that bugs could be fixed. thanks @soef for his work.
+
 #### Configuration
 Configuration not necessary. The first received broadcast will create all alilable devices and states
 
