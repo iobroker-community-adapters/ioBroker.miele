@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "node-json-rpc": "^0.0.1",
-    "soef": "^0.1.45",
+    "soef": "^0.4.15",
     "@iobroker/adapter-core": "^1.0.3"
   },
   "devDependencies": {
