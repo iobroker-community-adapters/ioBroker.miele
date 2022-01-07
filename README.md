@@ -1,10 +1,10 @@
 ![Logo](admin/miele.png)
 ## ioBroker.miele
 
-![Number of Installations](http://iobroker.live/badges/miele-community-installed.svg) ![Number of Installations](http://iobroker.live/badges/miele-community-stable.svg) [![NPM version](http://img.shields.io/npm/v/iobroker.miele.svg)](https://www.npmjs.com/package/iobroker.miele)
-[![Tests](http://img.shields.io/travis/soef/ioBroker.miele/master.svg)](https://travis-ci.org/soef/ioBroker.miele)
-[![Build status](https://ci.appveyor.com/api/projects/status/o43a9fj5a19d5n6y?svg=true)](https://ci.appveyor.com/project/soef/iobroker-miele)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://github.com/soef/iobroker.miele/blob/master/LICENSE)
+![Number of Installations](http://iobroker.live/badges/miele-installed.svg) ![Number of Installations](http://iobroker.live/badges/miele-stable.svg) [![NPM version](http://img.shields.io/npm/v/iobroker.miele.svg)](https://www.npmjs.com/package/iobroker.miele)
+[![Tests](http://img.shields.io/travis/iobroker-community-adapters/ioBroker.miele/master.svg)](https://travis-ci.org/iobroker-community-adapters/ioBroker.miele)
+[![Build status](https://ci.appveyor.com/api/projects/status/o43a9fj5a19d5n6y?svg=true)](https://ci.appveyor.com/project/iobroker-community-adapters/iobroker-miele)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://github.com/iobroker-community-adapters/iobroker.miele/blob/master/LICENSE)
 
 <!-- [![Downloads](https://img.shields.io/npm/dm/iobroker.miele.svg)](https://www.npmjs.com/package/iobroker.miele)-->
 
