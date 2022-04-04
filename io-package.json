@@ -1,6 +1,6 @@
 {
     "common": {
-        "name": "miele-community",
+        "name": "miele",
         "version": "0.1.6",
         "news": {
             "0.1.6": {
@@ -29,8 +29,8 @@
         "platform": "Javascript/Node.js",
         "mode": "daemon",
         "icon": "miele.png",
-        "extIcon": "https://raw.githubusercontent.com/soef/iobroker.miele/master/admin/miele.png",
-        "readme": "https://github.com/soef/iobroker.miele/blob/master/README.md",
+        "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/iobroker.miele/master/admin/miele.png",
+        "readme": "https://github.com/iobroker-community-adapters/iobroker.miele/blob/master/README.md",
         "license": "MIT",
         "loglevel": "info",
         "keywords": [
