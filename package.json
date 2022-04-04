@@ -29,7 +29,7 @@
   "dependencies": {
     "node-json-rpc": "^0.0.1",
     "soef": "^0.1.45",
-    "@iobroker/adapter-core": "^2.4.0"
+    "@iobroker/adapter-core": "^2.6.0"
   },
   "devDependencies": {
     "mocha": "^9.2.2",
