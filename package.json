@@ -1,5 +1,5 @@
 {
-  "name": "iobroker.miele-community",
+  "name": "iobroker.miele",
   "version": "0.1.6",
   "description": "Miele Adapter",
   "author": {
@@ -12,7 +12,7 @@
       "email": "soef@gmx.net"
     }
   ],
-  "homepage": "https://github.com/soef/iobroker.miele",
+  "homepage": "https://github.com/iobroker-community-adapters/iobroker.miele",
   "license": "MIT",
   "keywords": [
     "ioBroker",
@@ -24,19 +24,19 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/soef/iobroker.miele.git"
+    "url": "git+https://github.com/iobroker-community-adapters/iobroker.miele.git"
   },
   "dependencies": {
     "node-json-rpc": "^0.0.1",
     "soef": "^0.4.15",
-    "@iobroker/adapter-core": "^1.0.3"
+    "@iobroker/adapter-core": "^2.6.0"
   },
   "devDependencies": {
-    "mocha": "^4.1.0",
+    "mocha": "^10.2.0",
     "chai": "^4.1.2"
   },
   "bugs": {
-    "url": "https://github.com/soef/iobroker.miele/issues"
+    "url": "https://github.com/iobroker-community-adapters/iobroker.miele/issues"
   },
   "main": "miele.js",
   "scripts": {
