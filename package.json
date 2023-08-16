@@ -26,6 +26,9 @@
     "type": "git",
     "url": "git+https://github.com/iobroker-community-adapters/iobroker.miele.git"
   },
+  "engines": {
+    "node": ">= 16"
+  },
   "dependencies": {
     "node-json-rpc": "^0.0.1",
     "soef": "^0.4.15",
