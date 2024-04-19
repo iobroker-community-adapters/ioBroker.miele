@@ -20,7 +20,19 @@
                 "de": "CI testing erweitert"
             }
         },
-        "title": "Miele",
+        "titleLang": {
+            "en": "Miele",
+            "de": "Miele",
+            "ru": "Miele",
+            "pt": "Miele",
+            "nl": "Miele",
+            "fr": "Miele",
+            "it": "Miele",
+            "es": "Miele",
+            "pl": "Miele",
+            "uk": "Мієл",
+            "zh-cn": "米埃莱"
+        },
         "desc": {
             "en": "Miele XGW 3000",
             "de": "Miele XGW 3000",
@@ -31,8 +43,12 @@
         "icon": "miele.png",
         "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/iobroker.miele/master/admin/miele.png",
         "readme": "https://github.com/iobroker-community-adapters/iobroker.miele/blob/master/README.md",
-        "license": "MIT",
+        "licenseInformation": {
+            "license": "MIT",
+            "type": "free"
+        },
         "loglevel": "info",
+        "tier": 2,
         "keywords": [
             "ioBroker",
             "miele",
@@ -42,14 +58,26 @@
             "xgw 2000"
         ],
         "enabled": true,
-        "nondeletable": true,
         "type": "household",
         "authors": [
             {
                 "name": "soef",
                 "email": "soef@gmx.net"
             }
-        ]
+        ],
+        "adminUI": {
+            "config": "html"
+        },
+        "dependencies": [
+            {
+              "js-controller": ">=5.0.19"
+            }
+        ],
+        "globalDependencies": [
+            {
+              "admin": ">=6.13.16"
+            }
+        ]      
     },
     "native": {},
     "instanceObjects": [
