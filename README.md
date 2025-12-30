@@ -33,7 +33,9 @@ Miele gateway e.g. XGW 3000
     ### **WORK IN PROGRESS**
 -->
 ### **WORK IN PROGRESS**
-- (mcm1957) Adapter requires node.js >= 18 and js-controller >= 5 now
+- (copilot) Adapter requires js-controller >= 6.0.11 now
+- (copilot) Adapter requires admin >= 7.6.17 now
+- (mcm1957) Adapter requires node.js >= 18 now
 - (mcm1957) Dependencies have been updated
 
 

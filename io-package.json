@@ -1,96 +1,94 @@
 {
-    "common": {
-        "name": "miele",
-        "version": "0.1.6",
-        "news": {
-            "0.1.6": {
-                "en": "required soef version set to 0.1.45",
-                "de": "notwendige soef Version auf 0.1.45 erhöht"
-            },
-            "0.1.5": {
-                "en": "update basic package-file testing (Apollon77)",
-                "de": "Erweiterung der Tests (Apollon77)"
-            },
-            "0.1.4": {
-                "en": "node 0.12 removed from testing",
-                "de": "node 0.12 auf testing entfernt"
-            },
-            "0.1.3": {
-                "en": "Enhance CI testing",
-                "de": "CI testing erweitert"
-            }
-        },
-        "titleLang": {
-            "en": "Miele",
-            "de": "Miele",
-            "ru": "Miele",
-            "pt": "Miele",
-            "nl": "Miele",
-            "fr": "Miele",
-            "it": "Miele",
-            "es": "Miele",
-            "pl": "Miele",
-            "uk": "Мієл",
-            "zh-cn": "米埃莱"
-        },
-        "desc": {
-            "en": "Miele XGW 3000",
-            "de": "Miele XGW 3000",
-            "ru": "Miele XGW 3000"
-        },
-        "platform": "Javascript/Node.js",
-        "mode": "daemon",
-        "icon": "miele.png",
-        "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/iobroker.miele/master/admin/miele.png",
-        "readme": "https://github.com/iobroker-community-adapters/iobroker.miele/blob/master/README.md",
-        "licenseInformation": {
-            "license": "MIT",
-            "type": "free"
-        },
-        "loglevel": "info",
-        "tier": 2,
-        "keywords": [
-            "ioBroker",
-            "miele",
-            "Smart Home",
-            "miele@home",
-            "xgw 3000",
-            "xgw 2000"
-        ],
-        "enabled": true,
-        "type": "household",
-        "authors": [
-            {
-                "name": "soef",
-                "email": "soef@gmx.net"
-            }
-        ],
-        "adminUI": {
-            "config": "html"
-        },
-        "dependencies": [
-            {
-              "js-controller": ">=5.0.19"
-            }
-        ],
-        "globalDependencies": [
-            {
-              "admin": ">=6.13.16"
-            }
-        ]      
+  "common": {
+    "name": "miele",
+    "version": "0.1.6",
+    "news": {
+      "0.1.6": {
+        "en": "required soef version set to 0.1.45",
+        "de": "notwendige soef Version auf 0.1.45 erhöht"
+      },
+      "0.1.5": {
+        "en": "update basic package-file testing (Apollon77)",
+        "de": "Erweiterung der Tests (Apollon77)"
+      },
+      "0.1.4": {
+        "en": "node 0.12 removed from testing",
+        "de": "node 0.12 auf testing entfernt"
+      },
+      "0.1.3": {
+        "en": "Enhance CI testing",
+        "de": "CI testing erweitert"
+      }
     },
-    "native": {},
-    "instanceObjects": [
-        {
-            "_id": "IPs",
-            "type": "state",
-            "common": {
-                "role": "state",
-                "name": "IPs",
-                "type": "string"
-            },
-            "native": {}
-        }
+    "titleLang": {
+      "en": "Miele",
+      "de": "Miele",
+      "ru": "Miele",
+      "pt": "Miele",
+      "nl": "Miele",
+      "fr": "Miele",
+      "it": "Miele",
+      "es": "Miele",
+      "pl": "Miele",
+      "uk": "Мієл",
+      "zh-cn": "米埃莱"
+    },
+    "desc": {
+      "en": "Miele XGW 3000",
+      "de": "Miele XGW 3000",
+      "ru": "Miele XGW 3000"
+    },
+    "platform": "Javascript/Node.js",
+    "mode": "daemon",
+    "icon": "miele.png",
+    "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/iobroker.miele/master/admin/miele.png",
+    "readme": "https://github.com/iobroker-community-adapters/iobroker.miele/blob/master/README.md",
+    "licenseInformation": {
+      "license": "MIT",
+      "type": "free"
+    },
+    "loglevel": "info",
+    "tier": 2,
+    "keywords": [
+      "ioBroker",
+      "miele",
+      "Smart Home",
+      "miele@home",
+      "xgw 3000",
+      "xgw 2000"
     ],
-    "objects": []
+    "enabled": true,
+    "type": "household",
+    "authors": [
+      "soef <soef@gmx.net>",
+      "iobroker-community-adapters <iobroker-community-adapters@gmx.de>"
+    ],
+    "adminUI": {
+      "config": "html"
+    },
+    "dependencies": [
+      {
+        "js-controller": ">=6.0.11"
+      }
+    ],
+    "globalDependencies": [
+      {
+        "admin": ">=7.6.17"
+      }
+    ]
+  },
+  "native": {},
+  "instanceObjects": [
+    {
+      "_id": "IPs",
+      "type": "state",
+      "common": {
+        "role": "state",
+        "name": "IPs",
+        "type": "string"
+      },
+      "native": {}
+    }
+  ],
+  "objects": []
 }
