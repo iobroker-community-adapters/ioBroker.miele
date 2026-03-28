@@ -3,7 +3,7 @@
 var USE_ACTIONS = false;
 var READ_FROM_RPC_AT_START = true;
 
-var dgram = require('dgram'),
+var dgram = require('node:dgram'),
     rpc = require('node-json-rpc'),
     soef = require('soef');
 
