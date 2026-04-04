@@ -50,9 +50,7 @@
     "loglevel": "info",
     "tier": 2,
     "keywords": [
-      "ioBroker",
       "miele",
-      "Smart Home",
       "miele@home",
       "xgw 3000",
       "xgw 2000"
