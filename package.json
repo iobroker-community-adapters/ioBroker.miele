@@ -22,7 +22,7 @@
     "url": "git+https://github.com/iobroker-community-adapters/iobroker.miele.git"
   },
   "engines": {
-    "node": ">= 18"
+    "node": ">= 22"
   },
   "dependencies": {
     "node-json-rpc": "^0.0.1",
