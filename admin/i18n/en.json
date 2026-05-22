@@ -1,0 +1,5 @@
+{
+	"settingsTitle": "Miele adapter settings",
+	"noteTitle": "Note",
+	"noteText": "No configuration necessary. All devices and states will be created when receiving the first broadcast. Miele gateway, e.g. XGW 3000, is required. Note: For a device to be created, it must be active while this adapter is running. For example, briefly switching it on is sufficient."
+}

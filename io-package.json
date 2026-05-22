@@ -64,7 +64,7 @@
       "iobroker-community-adapters <iobroker-community-adapters@gmx.de>"
     ],
     "adminUI": {
-      "config": "html"
+      "config": "json"
     },
     "dependencies": [
       {

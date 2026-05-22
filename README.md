@@ -33,6 +33,7 @@ Miele gateway e.g. XGW 3000
     ### **WORK IN PROGRESS**
 -->
 ### **WORK IN PROGRESS**
+- (copilot) **ENHANCED**: Migrated adapter admin configuration UI to jsonConfig.
 - (copilot) Adapter requires admin >= 7.7.22 now
 - (copilot) Adapter requires js-controller >= 6.0.11 now
 - (copilot) Adapter requires admin >= 7.6.17 now

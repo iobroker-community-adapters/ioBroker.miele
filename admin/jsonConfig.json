@@ -1,0 +1,44 @@
+{
+  "i18n": true,
+  "type": "panel",
+  "items": {
+    "_settingsTitle": {
+      "type": "staticText",
+      "text": "settingsTitle",
+      "newLine": true,
+      "xs": 12,
+      "sm": 12,
+      "md": 12,
+      "lg": 12,
+      "xl": 12,
+      "style": {
+        "fontSize": 24,
+        "fontWeight": "bold"
+      }
+    },
+    "_noteTitle": {
+      "type": "staticText",
+      "text": "noteTitle",
+      "newLine": true,
+      "xs": 12,
+      "sm": 12,
+      "md": 12,
+      "lg": 12,
+      "xl": 12,
+      "style": {
+        "fontSize": 18,
+        "fontWeight": "bold"
+      }
+    },
+    "_noteText": {
+      "type": "staticText",
+      "text": "noteText",
+      "newLine": true,
+      "xs": 12,
+      "sm": 12,
+      "md": 12,
+      "lg": 12,
+      "xl": 12
+    }
+  }
+}
