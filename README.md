@@ -40,7 +40,7 @@ Miele gateway e.g. XGW 3000
 - (mcm1957) Dependencies have been updated
 
 
-### License
+## License
 The MIT License (MIT)
 
 Copyright (c) 2024 iobroker-community-adapters <iobroker-community-adapters@gmx.de>
