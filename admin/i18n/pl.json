@@ -1,0 +1,5 @@
+{
+    "settingsTitle": "Ustawienia adaptera Miele",
+    "noteTitle": "Uwaga",
+    "noteText": "Konfiguracja nie jest wymagana. Wszystkie urządzenia i stany zostaną utworzone po odebraniu pierwszej transmisji broadcast. Wymagana jest bramka Miele, np. XGW 3000. Uwaga: aby urządzenie zostało utworzone, musi być aktywne podczas działania tego adaptera. Na przykład wystarczy je krótko włączyć."
+}

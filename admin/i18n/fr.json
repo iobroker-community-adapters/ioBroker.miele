@@ -1,0 +1,5 @@
+{
+    "settingsTitle": "Paramètres de l'adaptateur Miele",
+    "noteTitle": "Remarque",
+    "noteText": "Aucune configuration n'est nécessaire. Tous les appareils et états seront créés à la réception de la première diffusion. Une passerelle Miele, p. ex. XGW 3000, est requise. Remarque : pour qu'un appareil soit créé, il doit être actif pendant l'exécution de cet adaptateur. Par exemple, une brève mise en marche suffit."
+}

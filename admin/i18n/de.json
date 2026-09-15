@@ -1,0 +1,5 @@
+{
+    "settingsTitle": "Miele Einstellungen",
+    "noteTitle": "Hinweis",
+    "noteText": "Keine Konfiguration notwendig. Alle Geräte und Zustände werden beim Empfang des ersten Broadcasts angelegt. Voraussetzung ist ein Miele Gateway, z. B. XGW 3000. Hinweis: Damit ein Gerät angelegt wird, muss es während der Laufzeit dieses Adapters aktiv sein. Beispielsweise reicht ein kurzes Einschalten aus."
+}

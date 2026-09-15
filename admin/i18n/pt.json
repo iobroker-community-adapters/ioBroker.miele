@@ -1,0 +1,5 @@
+{
+    "settingsTitle": "Configurações do adaptador Miele",
+    "noteTitle": "Observação",
+    "noteText": "Nenhuma configuração é necessária. Todos os dispositivos e estados serão criados ao receber a primeira transmissão. É necessário um gateway Miele, por exemplo, XGW 3000. Observação: para que um dispositivo seja criado, ele deve estar ativo enquanto este adaptador estiver em execução. Por exemplo, ligá-lo brevemente é suficiente."
+}

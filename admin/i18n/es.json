@@ -1,0 +1,5 @@
+{
+    "settingsTitle": "Configuración del adaptador Miele",
+    "noteTitle": "Nota",
+    "noteText": "No se requiere configuración. Todos los dispositivos y estados se crearán al recibir la primera difusión. Se requiere una pasarela Miele, p. ej., XGW 3000. Nota: para que se cree un dispositivo, debe estar activo mientras este adaptador se esté ejecutando. Por ejemplo, basta con encenderlo brevemente."
+}
